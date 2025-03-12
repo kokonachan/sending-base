@@ -1,0 +1,61 @@
+Project SendingBase {
+  database_type: 'PostgreSQL'
+  Note: '''
+    # SendingBase Database
+    **ユーザー、施設、患者、カルテ情報を管理するデータベース**
+  '''
+}
+
+Table users as U {
+  id int [pk]
+  userName varchar [note:"ユーザー名"]
+  email varchar [unique, not null, note:"メールアドレス"]
+  role varchar [note:"役割 (0:管理者, 1:施設職員, 2:医療従事者)"]
+  createdAt timestamp [default: `now()`, note:"作成日時"]
+  updatedAt timestamp [default: `now()`, note:"更新日時"]
+}
+
+Table facilities {
+  id int [pk]
+  facilityName varchar [not null, note:"施設名"]
+  address varchar [note:"住所"]
+  createdAt timestamp [default: `now()`, note:"作成日時"]
+  updatedAt timestamp [default: `now()`, note:"更新日時"]
+}
+
+Table patients {
+  id int [pk]
+  facilityId int [not null, ref: > facilities.id, note:"施設ID"]
+  address varchar [note:"住所"]
+  name varchar [not null, note:"患者名"]
+  birthdate date [note:"生年月日"]
+  gender varchar [note:"性別"]
+  careManagerName varchar [note:"ケアマネージャーの名前"]
+  careManagerOffice varchar [note:"ケアマネージャーの所属"]
+  insuranceNumber varchar [note:"保険証番号"]
+  certificationExpiryAt timestamp [note:"認定有効期限"]
+  certificationAt timestamp [note:"認定年月日"]
+  careLevel varchar [note:"介護レベル"]
+  visitDays int [default: 0, note:"来院曜日(0:月, 1:火, 2:水, 3:木, 4:金, 5:土, 6:日)"]
+  visitTime varchar [note:"来院時間"]
+  searchPatientList text[] [note:"患者検索リスト"]
+  createdAt timestamp [default: `now()`, note:"作成日時"]
+  updatedAt timestamp [default: `now()`, note:"更新日時"]
+}
+
+Table medicalRecords {
+  id int [pk]
+  patientId int [not null, ref: > patients.id, note:"患者ID"]
+  recordType int [not null, note:"カルテの種類"]
+  title varchar [not null, note:"カルテタイトル"]
+  createdBy int [not null, ref: > U.id, note:"作成スタッフ"]
+  createdAt timestamp [default: `now()`, note:"作成日時"]
+  updatedAt timestamp [default: `now()`, note:"更新日時"]
+}
+
+Table versions {
+  isForceUpdate boolean [default: false, note:"更新モード"]
+  isMaintenance boolean [default: false, note:"メンテナンスモード"]
+  isTest  boolean [default: false, note:"テストモード"]
+  version varchar [note:"バージョン"]
+}
