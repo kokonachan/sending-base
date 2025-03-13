@@ -10,7 +10,7 @@ class HandwritingPainter extends CustomPainter {
     final paint =
         Paint()
           ..color = Colors.black
-          ..strokeWidth = 3.0
+          ..strokeWidth = 1.0
           ..strokeCap = StrokeCap.round;
 
     for (int i = 0; i < points.length - 1; i++) {

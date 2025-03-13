@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sending_base_test/storage/repo/storage_repo.dart';
+import 'package:sending_base_test/feature/storage/repo/storage_repo.dart';
 
 part 'storage_controller.g.dart';
 
